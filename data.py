@@ -33,7 +33,7 @@ def fetch_ohlcv(exchange, max_retries, symbol, timeframe, since, limit):
 
 def get_data():
     exchange = ccxt.binance()
-    timeframes = ['5m', '1h', '1d']
+    timeframes = ['5m', '1h', '1d', '1m']
     symbols = ['BTC/USDT']
     history_data = {}
 
@@ -43,13 +43,13 @@ def get_data():
         for timeframe in timeframes:
             filename = f'{symbol.replace("/", "")}-{timeframe}.csv'
             file_exists = os.path.isfile(filename)
-            since = exchange.parse8601('2023-06-01T00:00:00Z')
+            since = exchange.parse8601('2024-03-01T00:00:00Z')
             if file_exists:
                 existing_data = pd.read_csv(filename, index_col=0)
                 since = existing_data.index[-1]
             data = []
             while True:
-                print(datetime.fromtimestamp(since / 1000.0))
+                # print(datetime.fromtimestamp(since / 1000.0))
                 fetched_data = fetch_ohlcv(exchange, 3, symbol, timeframe, since, 1000)
                 if not fetched_data:
                     break
