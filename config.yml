@@ -1,0 +1,137 @@
+settings:
+    log_level: INFO
+    update_interval: 5
+    market_pairs:
+        - BTC/USDT
+        - ETH/BTC
+
+exchanges:
+    binance:
+        required:
+            enabled: true
+
+indicators:
+    rsi:
+        - enabled: true
+          alert_enabled: false
+          alert_frequency: once
+          signal:
+            - rsi
+          hot: 30
+          cold: 70
+          candle_period: 1h
+          period_count: 50
+        - enabled: true
+          alert_enabled: true
+          alert_frequency: once
+          signal:
+            - rsi
+          hot: 30
+          cold: 70
+          candle_period: 5m
+          period_count: 14
+    stoch_rsi:
+        - enabled: true
+          alert_enabled: true
+          alert_frequency: once
+          signal:
+            - stoch_rsi
+          hot: 20
+          cold: 80
+          candle_period: 5m
+          period_count: 14
+    momentum:
+        - enabled: true
+          alert_enabled: false
+          alert_frequency: once
+          signal:
+            - momentum
+          hot: 0
+          cold: 0
+          candle_period: 1d
+          period_count: 10
+        - enabled: true
+          alert_enabled: false
+          alert_frequency: once
+          signal:
+            - momentum
+          hot: 0
+          cold: 0
+          candle_period: 1h
+          period_count: 12
+    macd:
+        - enabled: true
+          alert_enabled: false
+          alert_frequency: once
+          signal:
+            - macd
+          hot: 0
+          cold: 0
+          candle_period: 15m
+        - enabled: true
+          alert_enabled: false
+          alert_frequency: once
+          signal:
+            - macdsignal
+          hot: 0
+          cold: 0
+          candle_period: 15m
+    obv:
+        - enabled: false
+    mfi:
+        - enabled: true
+          alert_enabled: true
+          alert_frequency: once
+          signal:
+            - mfi
+          hot: 20
+          cold: 80
+          candle_period: 5m
+          period_count: 14
+    ichimoku:
+        - enabled: false
+
+informants:
+    ema:
+        - enabled: true
+          signal:
+            - ema
+          candle_period: 1d
+          period_count: 10
+        - enabled: true
+          signal:
+            - ema
+          candle_period: 1d
+          period_count: 30
+
+crossovers:
+    std_crossover:
+        - enabled: true
+          alert_enabled: true
+          alert_frequency: once
+          key_indicator: ema
+          key_indicator_index: 0
+          key_indicator_type: informants
+          key_signal: ema
+          crossed_indicator: ema
+          crossed_indicator_index: 1
+          crossed_indicator_type: informants
+          crossed_signal: ema
+        - enabled: true
+          alert_enabled: true
+          alert_frequency: once
+          key_indicator: macd
+          key_indicator_index: 0
+          key_indicator_type: indicators
+          key_signal: macd
+          crossed_indicator: macd
+          crossed_indicator_index: 1
+          crossed_indicator_type: indicators
+          crossed_signal: macdsignal
+
+notifiers:
+    stdout:
+        required:
+            enable: true
+        optional:
+            template: "{{exchange}}-{{market}}-{{indicator}}-{{indicator_number}} is {{status}}!{{ '\n' -}}"          
